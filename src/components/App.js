@@ -15,6 +15,16 @@ class App extends React.Component {
     searchParams: null
   };
 
+  /**
+   * Loads data from API
+   * based on searchType - search by date or search by popularity
+   *
+   * @memberof App
+   * @method loadData
+   * @param {Object} params
+   * @param {Boolean} sortByDate
+   * @returns {Promise}
+   */
   loadData = async (params, sortByDate = this.state.sortByDate) => {
     let searchType = '';
 
@@ -29,6 +39,17 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * Checks if search parameters have been added
+   * Checks if date parameter has been added and based
+   * on that returns an object with all needed parameters
+   * for search request
+   *
+   * @memberof App
+   * @method checkForSearchParams
+   * @param {Number} page
+   * @returns {Object}
+   */
   checkForSearchParams = (page = this.state.activePage) => {
     let params = {
       page: page
@@ -45,19 +66,41 @@ class App extends React.Component {
     return params;
   }
 
+  /**
+   * Component lifecycle hook
+   * Waits for data to be loaded
+   * and sets needed parameters to the state of
+   * the component
+   *
+   * @memberof App
+   * @method componentDidMount
+   */
   componentDidMount = async () => {
     const params = {
       page: this.state.activePage
     }
     const response = await this.loadData(params);
 
-    this.setState({
-      news: response.data.hits,
-      itemsCountPerPage: response.data.hitsPerPage,
-      totalItemsCount: response.data.nbHits
-    });
+    if (response) {
+      const data = response.data;
+
+      this.setState({
+        news: data.hits,
+        itemsCountPerPage: data.hitsPerPage,
+        totalItemsCount: data.nbHits
+      });
+    }
   }
 
+  /**
+   * Checks if the user has been searching by popularity
+   * If yes, then no new search is triggered
+   * If no, makes search request and updates parameters
+   * from the state of the component
+   *
+   * @memberof App
+   * @method sortByPopularity
+   */
   sortByPopularity = async () => {
     const sortByDate = this.state.sortByDate;
 
@@ -74,6 +117,15 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * Checks if the user has been searching by date
+   * If yes, then no new search is triggered
+   * If no, makes search request and updates parameters
+   * from the state of the component
+   *
+   * @memberof App
+   * @method sortByDate
+   */
   sortByDate = async () => {
     const sortByDate = this.state.sortByDate;
 
@@ -90,6 +142,16 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * Checks what parameters are added to the search
+   * Makes search request
+   * Updates state parameters
+   *
+   * @memberof App
+   * @method onSearchSubmit
+   * @param {String} term
+   * @param {String} date
+   */
   onSearchSubmit = async (term, date) => {
     let params = {
       query: term
@@ -115,6 +177,14 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * Resets the search by calling a
+   * request without search parameters
+   * Updates state parameters
+   *
+   * @memberof App
+   * @method onSearchReset
+   */
   onSearchReset = async () => {
     const params = {
       page: 0
@@ -131,6 +201,17 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * Called when user changes a page from the
+   * Pagination component
+   * Preserves the parameters from the search
+   * Changes the page
+   * Updates state parameters
+   *
+   * @memberof App
+   * @method handlePageChange
+   * @param {Number} currentPage
+   */
   handlePageChange = async (currentPage) => {
     const page = currentPage - 1;
     const params = this.checkForSearchParams(page);

@@ -11,6 +11,16 @@ class Search extends React.Component {
     isSearching: false,
   };
 
+  /**
+   * Triggered when the user clicks Search
+   * Default behaviour is prevented
+   * Search properties (term, date) are set to the state
+   * action onSubmit from parent component is called
+   *
+   * @memberof Search
+   * @method onFormSubmit
+   * @param event
+   */
   onFormSubmit = (event) => {
     event.preventDefault();
 
@@ -31,6 +41,15 @@ class Search extends React.Component {
     this.props.onSubmit(term, date);
   }
 
+  /**
+   * Triggered when the user clicks Clear
+   * Search properties (term, date) are set to default (cleared)
+   * action onReset from parent component is called if the user has
+   * triggered Search
+   *
+   * @memberof Search
+   * @method onFormReset
+   */
   onFormReset = () => {
     if (this.state.term || this.state.date) {
       this.setState({
