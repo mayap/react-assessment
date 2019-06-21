@@ -66,3 +66,10 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### Future Developments on the project (if more time is available)
+- Remove the addon for pagination and implement one from scratch
+- Incorporate toast messages for unsuccessful requests
+- Optimize methods and components
+- Change UI and UX experience (remove semantic-ui library, add custom css)
+- Add spinners (show them while the page is loading)
