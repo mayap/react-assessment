@@ -8,7 +8,7 @@ class Search extends React.Component {
     term: '',
     date: null,
     invalidTerm: false,
-    invalidDate: false
+    isSearching: false,
   };
 
   onFormSubmit = (event) => {
@@ -17,29 +17,32 @@ class Search extends React.Component {
     const term = this.state.term;
     const date = this.state.date;
 
-    if (term && !date) {
-      this.setState({ invalidTerm: false, invalidDate: true });
-
-      return;
-    } else if (!term && date) {
-      this.setState({ invalidTerm: true, invalidDate: false });
-
-      return;
-    } else if (!term && !date) {
-      this.setState({ invalidTerm: true, invalidDate: true });
+    if (!term) {
+      this.setState({ invalidTerm: true });
 
       return;
     }
 
-    this.setState({ invalidTerm: false, invalidDate: false });
+    this.setState({
+      invalidTerm: false,
+      isSearching: true
+    });
+
     this.props.onSubmit(term, date);
   }
 
   onFormReset = () => {
-    this.setState({
-      term: '',
-      date: null
-    })
+    if (this.state.term || this.state.date) {
+      this.setState({
+        term: '',
+        date: null,
+        isSearching: false
+      });
+    }
+
+    if (this.state.isSearching) {
+      this.props.onReset();
+    }
   }
 
   render() {
@@ -57,8 +60,7 @@ class Search extends React.Component {
 
           <DatePicker
             selected={this.state.date}
-            onChange={(currentDate) => this.setState({ date: currentDate })}
-            className={this.state.invalidDate ? "error" : ''}/>
+            onChange={(currentDate) => this.setState({ date: currentDate })}/>
 
           <input type="submit" value="Search" />
           <input type="reset" value="Clear" />

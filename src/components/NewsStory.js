@@ -11,20 +11,25 @@ const NewsStory = props => {
       )
     });
 
+    const title = item.title || item.story_title;
+    const url = item.url || item.story_url;
+
     return (
       <div className="content" key={item.objectID}>
-        <a href={item.url}>
-          <div className="story-name header">{item.title}</div>
+        <a href={url}>
+          <div className="story-name header">{title}</div>
         </a>
         <div className="story-author meta ">{item.author}</div>
         <div className="story-date meta right floated time">{item.created_at}</div>
         <div className="story-tags extra content">
           {tags}
         </div>
+        <button onClick={url => window.location.href = url}>See full story</button>
         <br />
       </div>
     )
-  })
+  });
+
   return (
     <div className="ui card">
       {news}
