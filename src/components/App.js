@@ -3,7 +3,11 @@ import hackernews from '../api/hackernews';
 import NewsStory from './NewsStory';
 
 class App extends React.Component {
-  state = { news: [] };
+  state = {
+    news: [],
+    sortedAsc: false,
+    sortedDesc: false
+  };
 
   loadData = async () => {
     const response = await hackernews.get('/search');
@@ -19,9 +23,38 @@ class App extends React.Component {
     this.loadData();
   }
 
+  sortByAscPopularity = () => {
+    if (!this.state.sortedAsc) {
+      const sortedNews = this.state.news.sort(function(a, b){return a.points - b.points});
+
+      this.setState({
+        news: sortedNews,
+        sortedAsc: true,
+        sortedDesc: false,
+      });
+    }
+  }
+
+  sortByDescPopularity = () => {
+    if (!this.state.sortedDesc) {
+      const sortedNews = this.state.news.sort(function(a, b){return a.points - b.points}).reverse();
+
+      this.setState({
+        news: sortedNews,
+        sortedDesc: true,
+        sortedAsc: false
+      });
+    }
+  }
+
   render() {
     return (
       <div className="ui container">
+        <div>
+          Sort by popularity:
+          <button onClick={this.sortByAscPopularity}>Asc</button>
+          <button onClick={this.sortByDescPopularity}>Desc</button>
+        </div>
         <NewsStory news={this.state.news} />
       </div>
     );
