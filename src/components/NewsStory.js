@@ -2,7 +2,6 @@ import React from 'react';
 
 const NewsStory = props => {
   const news = props.news.map(item => {
-    debugger;
     const tags = item._tags.map(tag => {
       return (
         <span key={tag}>
